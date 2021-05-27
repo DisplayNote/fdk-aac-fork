@@ -56,7 +56,10 @@ class Deployer():
         self.system  = system
         self.build = build
         self.pkg = pkg
-        
+
+        # Needed to prevent copytree Error if self.dst exists.
+        shutil.rmtree(self.dst, True)
+                
         # Creates main project folder.
         if not os.path.exists(self.dst):
             logging.info("Create main folder "+self.dst)
@@ -179,7 +182,6 @@ class Deployer():
         logging.info("Conan profile: "+conan_profile)
             
         subprocess.run(["conan","export-pkg",".",self.pkg,"--profile",conan_profile,"-f"])
-        
 
     def upload_conan_pkgs(self):
         '''
@@ -231,8 +233,7 @@ def main(argv=None):
         parser.add_argument('--os_type','-os', const='android', default='android', nargs='?', choices=['android','windows','macos','ios'], help='Operating System type')
         parser.add_argument('--build_type','-b', const='debug', default='debug', nargs='?', choices=['debug','release'], help='Build type')
         parser.add_argument('--conan_package','-p', const='fdk_aac/2.1.1@dn/develop', default='fdk_aac/2.1.1@dn/develop', nargs='?', help='Conan package name')
-        parser.add_argument('-u', '--upload', action='store_true',
-                            help='Uploads Conan packages.')
+        parser.add_argument('-u', '--upload', action='store_true', help='Uploads Conan packages.')
 
         args = parser.parse_args()
 
