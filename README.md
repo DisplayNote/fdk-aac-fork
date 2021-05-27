@@ -19,6 +19,55 @@ Instructions to build fdk-aac Conan package.
 
 4. Headers and Binaries are found in `Android` folder.
 
+## Build fdk_acc for Windows (32 bit):
+
+### Create environment:
+1. Launch cmd.exe
+2. execute vcvars32.bat (i.e. with VS2019)
+```
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars32.bat with VS2019)
+```
+3. Get fdk_aac sources (https://github.com/DisplayNote/fdk-aac-fork.git)
+4. Go to fdk_aac repo root folder an edit Makefile.vc replace the lines
+```
+prefix = \usr\local
+...
+CFLAGS   = /nologo /W3 /Ox /MT /EHsc /Dinline=__inline $(TARGET_FLAGS) $(AM_CPPFLAGS) $(XCFLAGS
+```
+with
+```
+%Debug build
+prefix = conan-pkg-dbg
+...
+CFLAGS   = /nologo /W3 /Ox /MDd /EHsc /Dinline=__inline $(TARGET_FLAGS) $(AM_CPPFLAGS) $(XCFLAGS
+
+```
+or
+```
+%Release build
+prefix = conan-pkg
+...
+CFLAGS   = /nologo /W3 /Ox /MD /EHsc /Dinline=__inline $(TARGET_FLAGS) $(AM_CPPFLAGS) $(XCFLAGS
+
+```
+5. Build
+
+```
+nmake -f Makefile.vc
+```
+6. Install
+```
+nmake install -f Makefile.vc
+```
+
+7. Clean
+
+```
+nmake clean -f Makefile.vc
+```
+
+8. Copy `conanfile.py into` install folder and call `conan export-pkg` and `conan upload` to generate Conan packages.
+
 ## Create Conan package
 
 After build use `deploy_conan_pkg.py` to export and upload conan package.
