@@ -32,7 +32,7 @@ Script will build artifacts for Windows x86 and x86_64, Debug and Release config
 Scripts generate this artifact tree, then conan packages can be created from repo's root folder
 
 ```
-conan export-pkg . fdk-aac/<version>@dn/<channel> -pr <profile> [-f]
+conan export-pkg . fdk_aac/<version>@dn/<channel> -pr <profile> [-f]
 ```
 
 
