@@ -29,8 +29,8 @@ class Fdk_aacConan(ConanFile):
         self.cpp_info.libs = tools.collect_libs(self)
 
     def package(self):
+        self.copy("*", src=os.path.join("install", str(self.settings.os), str(self.settings.build_type), "include"), dst="include")
         if self.settings.os == 'Android':
-            self.copy("*", src=os.path.join("install", str(self.settings.os), str(self.settings.build_type), "include"), dst="include")
             if self.settings.arch == 'armv7':
                 self.copy("*", src=os.path.join("install", str(self.settings.os), str(self.settings.build_type), "lib/armeabi-v7a"), dst="lib/armeabi-v7a")
             elif self.settings.arch == 'armv8':
@@ -41,6 +41,11 @@ class Fdk_aacConan(ConanFile):
                 self.copy("*", src=os.path.join("install", str(self.settings.os), str(self.settings.build_type), "lib/x86"), dst="lib/x86")
             else:
                 print('Android architecture not supported = '+ self.settings.arch)
+        elif self.settings.os == 'Windows':
+            if self.settings.arch == 'x86_64':
+                self.copy("*", src=os.path.join("install", str(self.settings.os), str(self.settings.build_type), "lib/x86_64"), dst="lib")
+            if self.settings.arch == 'x86':
+                self.copy("*", src=os.path.join("install", str(self.settings.os), str(self.settings.build_type), "lib/x86"), dst="lib")
         else:
-            self.copy("*", src=os.path.join(str(self.settings.os), str(self.settings.build_type)))
+            print('OS not supported = '+ self.settings.os)
 
